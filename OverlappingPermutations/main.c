@@ -12,7 +12,7 @@
 
 int main(int argc, const char * argv[])
 {
-    int N, ActN, num[5], ord[5], order, rank;
+    int N, ActN, num[5], ord[5], order, rank, num_to_rem;
     int fact[4]={1,2,6,24};
     int ordercount[120];
     
@@ -28,27 +28,28 @@ int main(int argc, const char * argv[])
         ordercount[i]=0;
     
     N-=4;
-    while(N--)
+    
+    for(int i=0;i<5;i++)
+        ord[i]=0;
+    
+    for(int i=0;i<5;i++)
     {
-        for(int i=0;i<5;i++)
-            ord[i]=0;
-        for(int i=0;i<5;i++)
+        for(int j=0;j<5;j++)
         {
-            for(int j=0;j<5;j++)
+            if(i!=j)
             {
-                if(i!=j)
+                if(num[i]>num[j])
+                    ord[i]++;
+                if(num[i]==num[j])//stable ranking
                 {
-                    if(num[i]>num[j])
+                    if(i>j)
                         ord[i]++;
-                    if(num[i]==num[j])//stable ranking
-                    {
-                        if(i>j)
-                            ord[i]++;
-                    }
                 }
             }
         }
-        
+    }
+    while(N--)
+    {
         order=0;
         
         for(int i=0;i<4;i++)
@@ -64,11 +65,31 @@ int main(int argc, const char * argv[])
         
         ordercount[order]++;
         
-        for(int i=1;i<5;i++)
-            num[i-1]=num[i];
+        num_to_rem=num[0];
+        
+        for(int i=0;i<4;i++)
+        {
+            num[i]=num[i+1];
+            if(num[i]>=num_to_rem)
+                ord[i]=ord[i+1]-1;
+            else
+                ord[i]=ord[i+1];
+        }
         
         if(N)
             scanf("%d",&num[4]);
+        else
+            break;
+        
+        ord[4]=0;
+        
+        for(int i=0;i<4;i++)
+        {
+            if(num[4] >= num[i])
+                ord[4]++;
+            else
+                ord[i]++;
+        }
     }
     
     double average_occurrence = 0.0, variance = 0.0, standard_deviation, expected_occurence=(double)ActN/120;
@@ -88,14 +109,7 @@ int main(int argc, const char * argv[])
     variance/=120;
     standard_deviation=sqrt(variance);
     
-    printf("Number of occurrences for each permutation:");
-    
-    for(int i=0;i<120;i++)
-    {
-        printf("\nNumber of occurrences of permutation #%d = %d",i+1,ordercount[i]);
-    }
-    
-    printf("\nExpected average number of occurrences of each permutation = %lf",expected_occurence);
+    printf("Expected average number of occurrences of each permutation = %lf",expected_occurence);
     printf("\nActual average number of occurrences of each permutation = %lf",average_occurrence);
     printf("\nVariance in number of occurrences = %lf",variance);
     printf("\nStandard Deviation of occurrences = %lf",standard_deviation);
