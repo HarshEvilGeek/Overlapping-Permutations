@@ -92,7 +92,12 @@ int main(int argc, const char * argv[])
         }
     }
     
-    double average_occurrence = 0.0, variance = 0.0, standard_deviation, expected_occurence=(double)ActN/120;
+    double average_occurrence = 0.0, variance = 0.0, standard_deviation;
+    
+    for(int i=0;i<120;i++)
+    {
+        printf("Number of Occurrences for permutation #%d = %d\n",i+1,ordercount[i]);
+    }
     
     for(int i=0;i<120;i++)
     {
@@ -109,8 +114,7 @@ int main(int argc, const char * argv[])
     variance/=120;
     standard_deviation=sqrt(variance);
     
-    printf("Expected average number of occurrences of each permutation = %lf",expected_occurence);
-    printf("\nActual average number of occurrences of each permutation = %lf",average_occurrence);
+    printf("\nAverage number of occurrences of each permutation = %lf",average_occurrence);
     printf("\nVariance in number of occurrences = %lf",variance);
     printf("\nStandard Deviation of occurrences = %lf",standard_deviation);
     return 0;
